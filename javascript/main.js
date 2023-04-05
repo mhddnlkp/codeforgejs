@@ -1,59 +1,49 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width">
+// 1. COMPLETE VARIABLE AND FUNCTION DEFINITIONS
 
-    <title>Silly story generator</title>
+const customName = document.getElementById('customname');
+const randomize = document.querySelector('.randomize');
+const story = document.querySelector('.story');
 
-    <style>
+function randomValueFromArray(array){
+  const random = Math.floor(Math.random()*array.length);
+  return array[random];
+}
 
-    body {
-      font-family: helvetica, sans-serif;
-      width: 350px;
-    }
+// 2. RAW TEXT STRINGS
 
-    label {
-      font-weight: bold;  
-    }
+let storyText = 'It was 94 fahrenheit outside, so :insertx: went for a walk. When they got to :inserty:, they stared in horror for a few moments, then :insertz:. Bob saw the whole thing, but was not surprised — :insertx: weighs 300 pounds, and it was a hot day.';
 
-    div {
-      padding-bottom: 20px;
-    }
+let insertX = ['Willy the Goblin', 'Big Daddy', 'Father Christmas'];
+let insertY = ['the soup kitchen', 'Disneyland', 'the White House'];
+let insertZ = ['spontaneously combusted', 'melted into a puddle on the sidewalk', 'turned into a slug and crawled away'];
 
-    input[type="text"] {
-      padding: 5px;
-      width: 150px;
-    }
+// 3. EVENT LISTENER AND PARTIAL FUNCTION DEFINITION
 
-    p {
-      background: #FFC125;
-      color: #5E2612;
-      padding: 10px;
-      visibility: hidden;
-    }
+randomize.addEventListener('click', result);
 
-    </style>
-  </head>
+function result() {
+  let newStory = storyText;
 
-  <body>
-    <div>
-      <label for="customname">Enter custom name:</label>
-      <input id="customname" type="text" placeholder="">
-    </div>
-    <div>
-      <label for="us">US</label><input id="us" type="radio" name="ukus" value="us" checked>
-      <label for="uk">UK</label><input id="uk" type="radio" name="ukus" value="uk">
-    </div>
-    <div>
-      <button class="randomize">Generate random story</button>
-    </div>
-    <!-- Thanks a lot to Willy Aguirre for his help with the code for this assessment -->
-    <p class="story"></p>
-    
+  let xItem = randomValueFromArray(insertX);
+  let yItem = randomValueFromArray(insertY);
+  let zItem = randomValueFromArray(insertZ);
 
-    
-  </body>
-  <script src="main.js"></script>
-</html>
+  newStory = newStory.replace(':insertx:', xItem);
+  newStory = newStory.replace(':inserty:', yItem);
+  newStory = newStory.replace(':insertz:', zItem);
+
+  if(customName.value !== '') {
+    let name = customName.value;
+    newStory = newStory.replace('Bob', name);
+  }
+
+  if(document.getElementById("uk").checked) {
+    let weight = Math.round(300*0.071429) + ' stone';
+    let temperature =  Math.round((94-32)*(5/9)) + ' centigrade';
+    newStory = newStory.replace('94 fahrenheit', temperature);
+    newStory = newStory.replace('300 pounds', weight);
+  }
+
+  story.textContent = newStory;
+  story.style.visibility = 'visible';
+}
